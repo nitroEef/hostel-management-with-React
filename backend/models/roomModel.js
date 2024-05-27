@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const bcrypt = require('bcryptjs');hkwjkbdj
+const bcrypt = require('bcryptjs');
 
 const roomSchema = mongoose.Schema({
     roomNumber: {
