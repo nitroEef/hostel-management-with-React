@@ -177,5 +177,15 @@ const getAdmins = asyncHandler(async(req, res) => {
   })
 
 
+const updateAdmin = asyncHandler(async(req, res) => {
+  const admin = await Admin.findById(req.admin.id)
 
+    if(admin){
+      const {id, fullname, email, role} = admin
+
+      admin.email = email;
+      admin.fullname = req.body.name || fullname
+      admin.role = req.body.role
+    }
+})
 module.exports = {register, login, getAdmin, deleteAdmin, getAdmins}
