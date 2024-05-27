@@ -126,6 +126,25 @@ const login = asyncHandler (async (req,res) => {
   }
 })
 
+// delete an admin 
+const deleteAdmin = asyncHandler(async(req, res) => {
+  try{
+    const {adminId} = req.params
+    const admin = Admin.findById(adminId);
+  
+      if(!admin){
+        res.status(404);
+        throw new Error("user not found");
+      }
+      await Admin.deleteOne();
+      res.status(200).json({"message": "Admin deleted successfully"});
+  }catch(error){
+      console.error(error.message);
+      res.status(500).send("server error");
+  }
+});
+
+
 const getAdmin = asyncHandler(async (req, res) =>{
   try{
     const {adminId} = req.params;
@@ -145,7 +164,18 @@ const getAdmin = asyncHandler(async (req, res) =>{
   }
 });
 
-//to delete a admin
 
 
-module.exports = {register, login, getAdmin}
+//get details of a single admin
+const getAdmins = asyncHandler(async(req, res) => {
+  const admins = await Admin.find().sort("-createdAt").select("-password");
+  if(!admins){
+    res.status(500)
+    throw new Error("something went wrong")
+  }
+    res.status(200).json(admins);
+  })
+
+
+
+module.exports = {register, login, getAdmin, deleteAdmin, getAdmins}
