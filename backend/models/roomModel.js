@@ -6,21 +6,21 @@ const roomSchema = mongoose.Schema({
         type: number,
         required: true
     },
-    capacity: {
-        type: number,
+    roomCapacity: {
+        type: Number,
         required: true
     },
-    occupancy: {
-        type: number,
+    roomOccupancy: {
+        type: String,
         required: true
     },
 
-    location: {
-        type: string,
+    roomLocation: {
+        type: String,
         required: true
     },
-    status: {
-        type: string,
+    roomStatus: {
+        type: String,
         required: true
     }
 })
