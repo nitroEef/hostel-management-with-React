@@ -185,7 +185,20 @@ const updateAdmin = asyncHandler(async(req, res) => {
 
       admin.email = email;
       admin.fullname = req.body.name || fullname
-      admin.role = req.body.role
+      admin.role = req.body.role || role
+
+      const updatedAdmin = await admin.save()
+
+      res.status(200).json({
+        id: updatedAdmin.id,,
+        fullname: updatedAdmin.fullname,
+        email: updatedAdmin.email,
+        role: updatedAdmin.role
+      })
+
+    } else {
+      res.status(404)
+      throw new Error("admin not found")
     }
 })
-module.exports = {register, login, getAdmin, deleteAdmin, getAdmins}
+module.exports = {register, login, getAdmin, deleteAdmin, getAdmins, updateAdmin}
