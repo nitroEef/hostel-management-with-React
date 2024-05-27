@@ -177,28 +177,62 @@ const getAdmins = asyncHandler(async(req, res) => {
   })
 
 
-const updateAdmin = asyncHandler(async(req, res) => {
-  const admin = await Admin.findById(req.admin.id)
+// const updateAdmin = asyncHandler(async(req, res) => {
+//   const admin = await Admin.findById(req.admin._id)
 
-    if(admin){
-      const {id, fullname, email, role} = admin
+//     if(admin){
+//       const {_id, fullname, email, role} = admin
 
-      admin.email = email;
-      admin.fullname = req.body.name || fullname
-      admin.role = req.body.role || role
+//       admin._id = _id,
+//       admin.email = email;
+//       admin.fullname = req.body.name || fullname
+//       admin.role = req.body.role || role
 
-      const updatedAdmin = await admin.save()
+//       const updatedAdmin = await admin.save()
 
-      res.status(200).json({
-        id: updatedAdmin.id,,
-        fullname: updatedAdmin.fullname,
-        email: updatedAdmin.email,
-        role: updatedAdmin.role
-      })
+//       res.status(200).json({
+//         _id: updatedAdmin._id,
+//         fullname: updatedAdmin.fullname,
+//         email: updatedAdmin.email,
+//         role: updatedAdmin.role
+//       })
 
-    } else {
-      res.status(404)
-      throw new Error("admin not found")
-    }
+//     } else {
+//       res.status(404)
+//       throw new Error("admin not found")
+//     }
+// })
+
+const updateAdmin = asyncHandler(async (req, res) => {
+
+  const { adminId } = req.params;
+
+    const admin = await Admin.findById(adminId).select("-password");
+
+    if (admin) {
+
+      if (req.body?.fullname) admin.fullname = req.body.fullname;
+      if (req.body?.email) admin.email = req.body.email;
+      if (req.body?.role) admin.role = req.body.role;
+  
+      const result = await admin.save()
+
+      res.json(result)
+
+}
+
 })
-module.exports = {register, login, getAdmin, deleteAdmin, getAdmins, updateAdmin}
+
+const logoutAdmin = asyncHandler(async (req, res) => {
+  res.cookie("token","",{
+    path:"/",
+    httpOnly:true,
+    expires: new Date(Date.now() + 1000 * 86400),
+    sameSite : "none",
+    secure:true
+  })
+
+return res.status(200).json({message:"log is successful"})
+
+})
+module.exports = {register, login, getAdmin, deleteAdmin, getAdmins, updateAdmin, logoutAdmin}
