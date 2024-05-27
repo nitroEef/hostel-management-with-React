@@ -232,7 +232,7 @@ const logoutAdmin = asyncHandler(async (req, res) => {
     secure:true
   })
 
-return res.status(200).json({message:"log is successful"})
+return res.status(200).json({message:"logout is successful"})
 
 })
 module.exports = {register, login, getAdmin, deleteAdmin, getAdmins, updateAdmin, logoutAdmin}
