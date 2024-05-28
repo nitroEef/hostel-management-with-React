@@ -38,7 +38,7 @@ app.get("/", (req, res) => {
 
 
 app.use ("/admin", adminRoute);
-app.use ("/Room", roomRoute);
+app.use ("/room", roomRoute);
 
 connectDB()
 
