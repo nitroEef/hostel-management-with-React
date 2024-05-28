@@ -1,20 +1,6 @@
 
 
 
-// //get all rooms baby
-// const getAllRooms = asyncHandler(async (req, res) => {
-  
-//     const roomies = await Room.find().sort("-createdAt");
-    
-//     if (!roomies) {
-//       res.status(500);
-//       throw new Error("something went wrong");
-//     }
-    
-//     res.status(200).json(roomies);
-//   });
-
-
 //   //get room
 //   const getRoom = asyncHandler(async (req, res) => {
 //     try {
