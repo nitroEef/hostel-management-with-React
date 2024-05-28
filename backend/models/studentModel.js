@@ -42,6 +42,13 @@ gender:{
         type:String,
         required:true,
         unique:true,
-        enum:['male','female']
-    }
+        enum:['male','female', 'others']
+    },
+
+nationality:{
+    type:String,
+    required:true,
+    unique:true,
+    enum:['nigerian','foreigner']
+}
 }
