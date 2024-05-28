@@ -145,20 +145,25 @@ const deleteAdmin = asyncHandler(async(req, res) => {
 });
 
 
-const getAdmin = asyncHandler(async (req, res) =>{
-  try{
-    const {adminId} = req.params;
+// Define an asynchronous route handler for retrieving a specific admin by ID
+const getAdmin = asyncHandler(async (req, res) => {
+  try {
+    // Extract adminId from request parameters
+    const { adminId } = req.params;
+    
+    // Find the admin by ID
     const admin = await Admin.findById(adminId);
-  
-    if(admin) {
-      const{ _id, fullname, email, role } = admin;
-      res.status(200).json({
-        _id, fullname, email, role});
-
-    }else{
-      res.status(404).json({"message":"we no find admin"})
+    
+    // If the admin is found, extract specific fields and send them in the response
+    if (admin) {
+      const { _id, fullname, email, role } = admin;
+      res.status(200).json({ _id, fullname, email, role });
+    } else {
+      // If the admin is not found, send a 404 response with a message
+      res.status(404).json({ "message": "we no find admin" });
     }
   } catch (error) {
+    // Log any errors to the console and send a 500 response with a message
     console.error(error.message);
     res.status(500).send("Server Error");
   }
@@ -166,73 +171,76 @@ const getAdmin = asyncHandler(async (req, res) =>{
 
 
 
-//get details of a single admin
-const getAdmins = asyncHandler(async(req, res) => {
+
+//get details of all admins
+// Define an asynchronous route handler for retrieving all admins
+const getAdmins = asyncHandler(async (req, res) => {
+  
+  // Find all admin documents, sort them by creation date in descending order, 
+  // and exclude the password field
   const admins = await Admin.find().sort("-createdAt").select("-password");
-  if(!admins){
-    res.status(500)
-    throw new Error("something went wrong")
+  
+  // If no admins are found, set the status to 500 and throw an error
+  if (!admins) {
+    res.status(500);
+    throw new Error("something went wrong");
   }
-    res.status(200).json(admins);
-  })
+  
+  // Send the retrieved admin documents in the response with a status of 200 (OK)
+  res.status(200).json(admins);
+});
 
 
-// const updateAdmin = asyncHandler(async(req, res) => {
-//   const admin = await Admin.findById(req.admin._id)
 
-//     if(admin){
-//       const {_id, fullname, email, role} = admin
-
-//       admin._id = _id,
-//       admin.email = email;
-//       admin.fullname = req.body.name || fullname
-//       admin.role = req.body.role || role
-
-//       const updatedAdmin = await admin.save()
-
-//       res.status(200).json({
-//         _id: updatedAdmin._id,
-//         fullname: updatedAdmin.fullname,
-//         email: updatedAdmin.email,
-//         role: updatedAdmin.role
-//       })
-
-//     } else {
-//       res.status(404)
-//       throw new Error("admin not found")
-//     }
-// })
-
+  // Define an asynchronous route handler for updating an admin
 const updateAdmin = asyncHandler(async (req, res) => {
-
+  
+  // Extract adminId from request parameters
   const { adminId } = req.params;
 
-    const admin = await Admin.findById(adminId).select("-password");
+  // Find the admin by ID, excluding the password field
+  const admin = await Admin.findById(adminId).select("-password");
 
-    if (admin) {
+  // If the admin exists, update the fields from the request body
+  if (admin) {
+    if (req.body?.fullname) admin.fullname = req.body.fullname; // Update fullname if provided
+    if (req.body?.email) admin.email = req.body.email; // Update email if provided
+    if (req.body?.role) admin.role = req.body.role; // Update role if provided
 
-      if (req.body?.fullname) admin.fullname = req.body.fullname;
-      if (req.body?.email) admin.email = req.body.email;
-      if (req.body?.role) admin.role = req.body.role;
-  
-      const result = await admin.save()
+    // Save the updated admin document
+    const result = await admin.save();
 
-      res.json(result)
+    // Send the updated admin document in the response
+    res.json(result);
+  }
 
-}
+});
 
-})
 
+
+// Define an asynchronous route handler for logging out an admin user
 const logoutAdmin = asyncHandler(async (req, res) => {
-  res.cookie("token","",{
-    path:"/",
-    httpOnly:true,
+  
+  // Set a cookie named "token" with an empty value to effectively log out the user
+  res.cookie("token", "", {
+    // Set the path for which the cookie is valid; "/" means the cookie is valid for the entire domain
+    path: "/",
+    
+    // Make the cookie accessible only via HTTP(S), not JavaScript (enhances security)
+    httpOnly: true,
+    
+    // Set the expiration date of the cookie to 1 day (86400 seconds) from now
     expires: new Date(Date.now() + 1000 * 86400),
-    sameSite : "none",
-    secure:true
-  })
+    
+    // Ensure the cookie is sent only in requests with the same site, to prevent CSRF attacks
+    sameSite: "none",
+    
+    // Ensure the cookie is sent only over HTTPS connections
+    secure: true
+  });
 
-return res.status(200).json({message:"logout is successful"})
+  // Send a response indicating that the user has been logged out
+  res.status(200).json({ message: "Logged out successfully" });
+});
 
-})
-module.exports = {register, login, getAdmin, deleteAdmin, getAdmins, updateAdmin, logoutAdmin}
+module.exports = {register, login, getAdmin, deleteAdmin, getAdmins, updateAdmin, logoutAdmin} 

@@ -12,7 +12,7 @@ const roomSchema = mongoose.Schema({
     },
     roomOccupancy: {
         type: String,
-        required: true
+        ref:"Student"
     },
 
     roomLocation: {
@@ -21,6 +21,9 @@ const roomSchema = mongoose.Schema({
     },
     roomStatus: {
         type: String,
-        required: true
-    }
+        default:"unAvailable"
+        },
 })
+
+const Room = mongoose.model("Room", roomSchema)
+module.exports = Room;
