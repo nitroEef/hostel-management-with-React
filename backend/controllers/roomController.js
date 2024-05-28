@@ -1,34 +1,4 @@
 
-
-
-//   //get room
-//   const getRoom = asyncHandler(async (req, res) => {
-//     try {
-//       const { roomNumber } = req.params;
-      
-//       const oneRoom = await Room.findOne({ roomNumber });
-  
-//       if (oneRoom) {
-//         const { roomNumber, roomCapacity } = oneRoom;
-//         res.status(200).json({ roomNumber, roomCapacity });
-//       } else {
-//         res.status(404).json({ message: "Room not found" });
-//       }
-//     } catch (error) {
-//       console.error(error.message);
-//       res.status(500).json({ message: "Server Error" });
-//     }
-//   });
-  
-
-
-
-// module.exports = {createNewRoom, getAllRooms, getRoom} 
-
-
-
-
-
 const asyncHandler = require("express-async-handler");
 const Room = require("../models/roomModel");
 
@@ -74,3 +44,34 @@ const getrooms = await Room.find().sort()
     
     res.status(200).json(getrooms);
   });
+
+
+  const getRoom = asyncHandler(async(req,res) => {
+    const roomId = req.params.roomId;
+    try{
+      const room = await Room.findById(roomId);
+    }
+    catch(error){
+      res.status(500).json("Server Error");
+    }
+    //   if(!room){
+    //     res.status(404);
+    //     throw new Error("room not found");
+    //   }
+    //   res.status(200).json(room);
+    // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+module.exports = {createNewRoom, getAllRooms, getRoom} 
