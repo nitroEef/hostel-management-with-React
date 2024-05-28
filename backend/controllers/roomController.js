@@ -3,8 +3,8 @@ const Room= require("../models/roomModel");
 
 const createNewRoom = asyncHandler(async (req, res) => {
     try {
-    const { roomNumber, roomCapacity, roomOccupancy, roomLocation, roomStatus } = req.body;
-      !roomNumber || !roomCapacity || !roomOccupancy || !roomLocation  || !roomStatus &&
+    const { roomNumber, roomCapacity, roomOccupancy,  } = req.body;
+      !roomNumber || !roomCapacity || !roomOccupancy  &&
             (() => {
               res.status(400);
               throw new Error("pls fill gbogbo required fields yen asap");
