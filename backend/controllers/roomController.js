@@ -53,13 +53,19 @@ const getrooms = await Room.find().sort()
       if(room){
         const{_id, roomNumber, roomCapacity, roomOccupancy, roomLocation,  roomStatus} = room;
         res.status(200).json({_id, roomNumber, roomCapacity, roomOccupancy, roomLocation,  roomStatus})
+      }else{
+        res.status(404).json("yaasin room is not found")
       }
     }
     catch(error){
       res.status(500).json("Server Error");
-    }
+    }})
 
-
+// to update room 
+    const updateRoom = asyncHandler(async(req,res) =>{}
+      const roomId = req.params.roomId;
+      
+  )
 
 
 
