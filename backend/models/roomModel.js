@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 
 const roomSchema = mongoose.Schema({
     roomNumber: {
-        type: number,
+        type: Number,
         required: true
     },
     roomCapacity: {

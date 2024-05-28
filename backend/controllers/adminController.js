@@ -6,19 +6,15 @@ const  generateToken  = require("../utils/index");
 //register a new admin
 const register = asyncHandler(async (req, res) => {
   try {
-    const { fullname, email, password } = req.body;
+  const { fullname, email, password } = req.body;
     
-      !fullname ||
-        !email ||
-        !password &&
+    !fullname || !email || !password &&
           (() => {
             res.status(400);
             throw new Error("pls fill gbogbo required fields yen asap");
           })();
     
-
-    
-      password.length < 6 &&
+    password.length < 6 &&
         (() => {
           res.status(400);
           throw new Error("password must be up to 6 characters");
@@ -191,6 +187,7 @@ const getAdmins = asyncHandler(async (req, res) => {
 });
 
 
+// to update admins 
 const updateAdmin = asyncHandler(async (req, res) => {
   // Extracting adminId from the request parameters
   const { adminId } = req.params;
