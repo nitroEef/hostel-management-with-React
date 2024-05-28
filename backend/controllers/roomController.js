@@ -50,16 +50,14 @@ const getrooms = await Room.find().sort()
     const roomId = req.params.roomId;
     try{
       const room = await Room.findById(roomId);
+      if(room){
+        const{_id, roomNumber, roomCapacity, roomOccupancy, roomLocation,  roomStatus} = room;
+        res.status(200).json({_id, roomNumber, roomCapacity, roomOccupancy, roomLocation,  roomStatus})
+      }
     }
     catch(error){
       res.status(500).json("Server Error");
     }
-    //   if(!room){
-    //     res.status(404);
-    //     throw new Error("room not found");
-    //   }
-    //   res.status(200).json(room);
-    // }
 
 
 
