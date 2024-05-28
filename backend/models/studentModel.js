@@ -53,8 +53,10 @@ nationality:{
 
 email:{
     type:String,
-    required:true,
+    required:[true,"plase add email e"],
+    trim:true,
+    lowercase:true,
     unique:true,
 
 }
-}
+})
