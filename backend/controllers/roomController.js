@@ -15,6 +15,7 @@ const createNewRoom = asyncHandler(async(req, res) => {
         res.status(400);
         throw new Error("Room already Exists")
        })
+       ();
     
     const room = await Room.create({
         roomNumber, roomCapacity, roomOccupancy, roomLocation,  roomStatus
