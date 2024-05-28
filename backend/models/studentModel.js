@@ -49,6 +49,12 @@ nationality:{
     type:String,
     required:true,
     unique:true,
-    enum:['nigerian','foreigner']
+},
+
+email:{
+    type:String,
+    required:true,
+    unique:true,
+
 }
 }
