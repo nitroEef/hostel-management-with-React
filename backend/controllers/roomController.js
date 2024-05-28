@@ -3,28 +3,17 @@ const Room= require("../models/roomModel");
 
 const createNewRoom = asyncHandler(async (req, res) => {
     try {
-    const { roomNumber, roomCapacity, roomOccupancy,  } = req.body;
-      !roomNumber || !roomCapacity || !roomOccupancy  &&
-            (() => {
-              res.status(400);
-              throw new Error("pls fill gbogbo required fields yen asap");
-            })();
+    const { roomNumber, roomCapacity, roomOccupancy,roomStatus, roomLocation  } = req.body;
+    
+    if(!roomNumber || !roomCapacity || !roomLocation)
+        res.status(400);
+        throw new Error("pls fill gbogbo required fields yen asap");
       
-  
-          const roomExists = await Room.findOne( roomNumber );
-          roomExists &&
-            (() => {
-              res.status(400);
-              throw new Error("room already exists");
-            }) ();
-
-
-        if (Room) {
-            const {roomNumber, roomCapacity, roomOccupancy, roomLocation, roomStatus} = Room;
-            res.status(201).json({
-                
-                roomNumber, roomCapacity, roomOccupancy, roomLocation, roomStatus
-            });
+    const room = await Room.create( roomNumber, roomCapacity, roomOccupancy, roomLocation, roomStatus);
+          
+    if (room) {
+            const {_id, roomNumber, roomCapacity, roomOccupancy, roomLocation, roomStatus} = Room;
+            res.status(201).json({_id, roomNumber, roomCapacity, roomOccupancy, roomLocation, roomStatus});
         } else{
             res.status(400);
             throw new Error("Invalid Data");
@@ -51,6 +40,7 @@ const getAllRooms = asyncHandler(async (req, res) => {
   });
 
 
+  //get room
   const getRoom = asyncHandler(async (req, res) => {
     try {
       const { roomNumber } = req.params;
