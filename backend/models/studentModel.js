@@ -12,6 +12,7 @@ const guardianSchema = mongoose.Schema({
         type: String,
         required: [true, 'please add an email'],
         trim: true
+    }
     })
 
     
