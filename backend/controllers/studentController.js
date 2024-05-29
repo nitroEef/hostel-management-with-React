@@ -15,3 +15,20 @@ const ensureUniqueId = async () =>{
 
     return uniqueId;
 }
+
+const registerStudent = asyncHandler (async (req, res) => {}) ;
+const getAllStudent = asyncHandler (async (req, res) => {}) ;
+const getStudent = asyncHandler (async (req, res) => {}) ;
+const updateStudentProfile = asyncHandler (async (req, res) => {}) ;
+const changeStudentRoom = asyncHandler (async (req, res) => {}) ;
+const updateCheckInStatus = asyncHandler (async (req, res) => {}) ;
+const deleteStudent= asyncHandler (async (req, res) => {}) ;
+
+module.exports = {registerStudent,
+    getAllStudent,
+    getStudent,
+    updateStudentProfile,
+    changeStudentRoom,
+    updateCheckInStatus,
+    deleteStudent}
+
