@@ -40,6 +40,25 @@ const registerStudent = asyncHandler (async (req, res) => {
     if (room.roomStatus !== "available"){
         return res.status(404).json("Room is not available")
     }
+    const uniqueId = ensureUniqueId();
+
+    const student = await Student.create({
+        _id: uniqueId,
+        name, email,
+        age, nationality,
+        guardian:{
+            guardianName:g_name,
+            guardianEmail:g_email
+
+        },
+        gender,
+        room:room._id
+        
+    })
+    
+
+
+
 }) ;
 
 
