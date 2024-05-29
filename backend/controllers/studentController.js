@@ -58,10 +58,19 @@ const registerStudent = asyncHandler (async (req, res) => {
 
     room.roomOccupancy.push(student._id)
     
+    if (room.roomOccupancy.length>=room.roomCapacity){
+        room.roomStatus = "unavailable"
+    }
 
+    // set room status to unavailable if room capacity is filled 
+    if (room.roomOccupancy.length>=room.roomCapacity){
+        room.roomStatus = "unavailable"
+    }
 
+    await room.save();
+    res.status(201).json(student) ;
 
-}) ;
+});
 
 
 
