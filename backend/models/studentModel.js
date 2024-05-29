@@ -84,7 +84,17 @@ checkedOutTime:{
     default:null,
 },
 },
-{}
-)
+    {
+        timestamps:true,
+        minimize:false,
+        toJSON:{getters:false}
+    }
+);
+
+studentSchema.methods.checkedI = function(){
+    this.checkedIn = true;
+    this.checkedInTime = new Date();
+    return this.save();
+}
 
 
