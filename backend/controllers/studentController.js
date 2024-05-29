@@ -54,7 +54,9 @@ const registerStudent = asyncHandler (async (req, res) => {
         gender,
         room:room._id
         
-    })
+    });
+
+    room.roomOccupancy.push(student._id)
     
 
 
