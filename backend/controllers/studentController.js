@@ -1,7 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const Student = require("../models/studentModel");
 const Room = require("../models/roomModel");
-const generateUniqueId = require("../utils/generateUniqueId");
+const {generateUniqueId} = require("../utils/generateUniqueId");
 
 const ensureUniqueId = async () =>{
     let uniqueId;
@@ -16,82 +16,86 @@ const ensureUniqueId = async () =>{
     return uniqueId;
 }
 
-const registerStudent = asyncHandler (async (req, res) => {
-    const {name, age , gender, nationality, email, g_name, g_email, roomNum} = req.body;
+const registerStudent = asyncHandler(async (req, res) => {
+  try {
+    const { email, name, age, nationality, g_name, g_email, gender, roomNum } =
+      req.body;
 
-    if(!name || !age || !gender || !nationality ||email || !g_name || !g_email || !roomNum) {
-        res.status(400);
-        throw new Error("Please! fill all the required field")
-    };
+    if (
+      !email ||
+      !name ||
+      !age ||
+      !nationality ||
+      !g_name ||
+      !g_email ||
+      !gender ||
+      !roomNum
+    ) {
+      res.status(400);
+      throw new Error("Please fill in all the required fields.");
+    }
 
-    const studentExist = await Student.findOne({ email});
+    const studentExist = await Student.findOne({ email });
+
     if (studentExist) {
-        res.status(400).
-        json("Student already Exists")
+      return res.status(400).json({ msg: "Student already exists" });
     }
 
-    // to get a room by its room number
-    const room = await Room.findOne({roomNumber:roomNum});
-    if(!room) {
-        res.status(404).
-        json("Room does not Exists")
+    const room = await Room.findOne({ roomNumber: roomNum });
+
+    if (!room) {
+      return res.status(404).json({ msg: "Room not found" });
     }
-    //to check if the room is available
-    if (room.roomStatus !== "available"){
-        return res.status(404).json("Room is not available")
+
+    if (room.roomStatus !== "available") {
+      return res.status(400).json({ msg: "Room is not available" });
     }
-    const uniqueId = ensureUniqueId();
+
+    const uniqueId = await ensureUniqueId();
 
     const student = await Student.create({
-        _id: uniqueId,
-        name, email,
-        age, nationality,
-        guardian:{
-            guardianName:g_name,
-            guardianEmail:g_email
-
-        },
-        gender,
-        room:room._id
-        
+      _id: uniqueId,
+      email,
+      name,
+      age,
+      nationality,
+      guardian: {
+        guardianName: g_name,
+        guardianEmail: g_email,
+      },
+      gender,
+      room: room._id,
+      checkedIn: true,
     });
 
-    room.roomOccupancy.push(student._id)
-    
-    if (room.roomOccupancy.length>=room.roomCapacity){
-        room.roomStatus = "unavailable"
-    }
+    room.roomOccupancy.push(student._id);
 
-    // set room status to unavailable if room capacity is filled 
-    if (room.roomOccupancy.length>=room.roomCapacity){
-        room.roomStatus = "unavailable"
+    if (room.roomOccupancy.length >= room.roomCapacity) {
+      room.roomStatus = "unavailable";
     }
 
     await room.save();
-    res.status(201).json(student) ;
 
+    res.status(201).json(student);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
 });
 
+const getAllStudent = asyncHandler(async (req, res) => {});
+const getStudent = asyncHandler(async (req, res) => {});
+const updateStudentProfile = asyncHandler(async (req, res) => {});
+const changeStudentRoom = asyncHandler(async (req, res) => {});
+const updateCheckInStatus = asyncHandler(async (req, res) => {});
+const deleteStudent = asyncHandler(async (req, res) => {});
 
-
-
-
-
-
-
-
-const getAllStudent = asyncHandler (async (req, res) => {}) ;
-const getStudent = asyncHandler (async (req, res) => {}) ;
-const updateStudentProfile = asyncHandler (async (req, res) => {}) ;
-const changeStudentRoom = asyncHandler (async (req, res) => {}) ;
-const updateCheckInStatus = asyncHandler (async (req, res) => {}) ;
-const deleteStudent= asyncHandler (async (req, res) => {}) ;
-
-module.exports = {registerStudent,
-    getAllStudent,
-    getStudent,
-    updateStudentProfile,
-    changeStudentRoom,
-    updateCheckInStatus,
-    deleteStudent}
-
+module.exports = {
+  registerStudent,
+  getAllStudent,
+  getStudent,
+  updateStudentProfile,
+  changeStudentRoom,
+  updateCheckInStatus,
+  deleteStudent,
+};

@@ -18,14 +18,15 @@ const guardianSchema = mongoose.Schema({
 
 //for students
 
-const studentSchema = new mongoose.Schema({
-    _id:{
-        type:String,
-        required:true,
-        unique:true
+const studentSchema = new mongoose.Schema(
+    {
+ _id:{
+    type:String,
+    required:true,
+    unique:true
     },
-
- name:{
+ 
+  name:{
         type:String,
         required:true,
         unique:true
@@ -69,11 +70,11 @@ room:{
 role:{
     type:String,
     enum:["student"],
-    default:"student"
+    default:"student",
 },
 checkedIn:{
     type:Boolean,
-    default:false
+    default:false,
 },
 checkedInTime:{
     type:Date,

@@ -9,6 +9,7 @@ const connectDB = require("./config/DBConnect");
 const errorHandler = require("./middleware/errrorMiddleware");
 const adminRoute = require("./routes/adminRoute");
 const roomRoute = require("./routes/roomRoute");
+const studentRoute = require("./routes/studentRoute");
 
 const PORT = process.env.PORT || 3500;
 
@@ -39,6 +40,7 @@ app.get("/", (req, res) => {
 
 app.use ("/admin", adminRoute);
 app.use ("/room", roomRoute);
+app.use ("/student", studentRoute);
 
 connectDB()
 
