@@ -91,13 +91,14 @@ checkedOutTime:{
     }
 );
 
-studentSchema.methods.checkedI = function(){
+studentSchema.methods.checkIn = function(){
     this.checkedIn = true;
     this.checkedInTime = new Date();
     this.checkedOutTime = null;
 }
 
 
-studentSchema.methods.checkedIn = function(){
+studentSchema.methods.checkOut = function(){
     this.checkedIn = false;
-    
+    this.checkedInTime = null;
+    this.check
