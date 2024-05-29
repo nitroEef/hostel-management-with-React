@@ -56,9 +56,35 @@ email:{
     required:[true,"plase add email e"],
     trim:true,
     lowercase:true,
-    unique:true,
+    unique:true
 
-}
-})
+},
+
+guardian:guardianSchema, 
+room:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"Room",
+    default:null,
+},
+role:{
+    type:String,
+    enum:["student"],
+    default:"student"
+},
+checkedIn:{
+    type:Boolean,
+    default:false
+},
+checkedInTime:{
+    type:Date,
+    default:null,
+},
+checkedOutTime:{
+    type:Date,
+    default:null,
+},
+},
+{}
+)
 
 
