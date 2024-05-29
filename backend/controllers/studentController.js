@@ -16,7 +16,37 @@ const ensureUniqueId = async () =>{
     return uniqueId;
 }
 
-const registerStudent = asyncHandler (async (req, res) => {}) ;
+const registerStudent = asyncHandler (async (req, res) => {
+    const {name, age , gender, nationality, email, g_name, g_email, roomNum} = req.body;
+
+    if(!name || !age || !gender || !nationality ||email || !g_name || !g_email || !roomNum) {
+        res.status(400);
+        throw new Error("Please! fill all the required field")
+    };
+
+    const studentExist = await Student.findOne({ email});
+    if (studentExist) {
+        res.status(400).
+        json("Student already Exists")
+    }
+
+    // to check if room is available 
+    const room = await Room.findOne({roomNumber:roomNum});
+    if(!room) {
+        res.status(404).
+        json("Room does not Exists")
+    }
+
+}) ;
+
+
+
+
+
+
+
+
+
 const getAllStudent = asyncHandler (async (req, res) => {}) ;
 const getStudent = asyncHandler (async (req, res) => {}) ;
 const updateStudentProfile = asyncHandler (async (req, res) => {}) ;
