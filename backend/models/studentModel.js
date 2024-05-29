@@ -100,5 +100,9 @@ studentSchema.methods.checkIn = function(){
 
 studentSchema.methods.checkOut = function(){
     this.checkedIn = false;
+    this.checkedOutTime = new Date();
     this.checkedInTime = null;
-    this.check
+}
+
+const Student = mongoose.model("Student", studentSchema)
+module.exports = Student;
