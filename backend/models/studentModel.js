@@ -94,7 +94,10 @@ checkedOutTime:{
 studentSchema.methods.checkedI = function(){
     this.checkedIn = true;
     this.checkedInTime = new Date();
-    return this.save();
+    this.checkedOutTime = null;
 }
 
 
+studentSchema.methods.checkedIn = function(){
+    this.checkedIn = false;
+    
