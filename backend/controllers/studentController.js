@@ -30,13 +30,16 @@ const registerStudent = asyncHandler (async (req, res) => {
         json("Student already Exists")
     }
 
-    // to check if room is available 
+    // to get a room by its room number
     const room = await Room.findOne({roomNumber:roomNum});
     if(!room) {
         res.status(404).
         json("Room does not Exists")
     }
-
+    //to check if the room is available
+    if (room.roomStatus !== "available"){
+        return res.status(404).json("Room is not available")
+    }
 }) ;
 
 
