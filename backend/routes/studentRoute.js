@@ -3,10 +3,10 @@ const { registerStudent, getAllStudent, getStudent, updateStudentProfile, change
 const router = express.Router();
 const {protect} = require('../middleware/authMiddleware');
 
-router.post("/register-student", registerStudent);
+router.post("/register-student",protect, registerStudent);
 router.get("/", getAllStudent);
 router.get("/:_id", getStudent);
-router.patch("/:_id", updateStudentProfile);
+router.patch("/:_id", protect, updateStudentProfile);
 router.post("/change-room", changeStudentRoom);
 router.post("/check-in-status", updateCheckInStatus);
 router.delete("/delete-student/:_id", deleteStudent);
