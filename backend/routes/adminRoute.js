@@ -14,10 +14,10 @@ const {protect} = require("../middleware/authMiddleware");
 router.post("/register", register);
 router.post("/login", login);
 
-router.get("/:adminId", getAdmin);
-router.delete("/:adminId", deleteAdmin);
+router.get("/:adminId",protect, getAdmin);
+router.delete("/:adminId",protect, deleteAdmin);
 router.get("/", getAdmins);
-router.put("/:adminId", updateAdmin);
+router.put("/:adminId",protect, updateAdmin);
 router.post("/logout/", logoutAdmin);
 
 module.exports = router;
