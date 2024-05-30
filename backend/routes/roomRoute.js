@@ -19,9 +19,4 @@ router.post("/delete-room/:roomId",protect, deleteRoom);
 module.exports = router;
 
 
-jicdbsdjhkdjhcsdhhhhhhhhhhhhhhhhhhhhhhhhhh
-aspkdsdfionodfhdfgit add .
-git commit -m "update"
-git push
-
 
