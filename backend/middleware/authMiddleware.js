@@ -32,7 +32,4 @@ const protect = asyncHandler(async (req, res, next) => {
         }
 
 });
-
-
-
-wdcuidfydf
+module.exports =
