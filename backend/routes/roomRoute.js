@@ -17,7 +17,3 @@ router.post("/delete-room/:roomId",protect, deleteRoom);
 
 
 module.exports = router;
-
-
-
-dhbhddhiduiduidiodiosdiohd
