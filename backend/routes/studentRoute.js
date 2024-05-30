@@ -17,4 +17,8 @@ module.exports = router;
 
 
 
-s;msd;lmd;kld;lsdfklfklfnklfnkldfs
+s;msd;lmd;kld;lsdfklfklfnklgit add .
+git commit -m "update"
+git push
+
+
