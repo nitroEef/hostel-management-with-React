@@ -126,6 +126,8 @@ const updateStudentProfile = asyncHandler(async (req, res) => {
   }
 });
 
+
+
 const changeStudentRoom = asyncHandler(async (req, res) => {
   const {studentId, newRoomNum} = req.body;
   const student = await Student.findById(studentId);
@@ -152,7 +154,22 @@ const changeStudentRoom = asyncHandler(async (req, res) => {
       return res.status(404).json({ message: "newroom not found" });
     }
 
-    if(newRoom) {
+    if(newRoom.roomStatus !== "available") {
+      return res.status(400).json({ message: "Room is not available" });
+  
+  }
+  
+    student.room=newRoom._id
+
+    newRoom.roomOccupancy.push(student._id);
+    if(newRoom.roomOccupancy.length >= newRoom.roomCapacity){
+      newRoom.roomStatus = "unavailable"
+    }
+
+    await newRoom.save();
+    await student.save();
+    res.status(200).json({message:"Student moved to new room", student, newRoom});
+  
   })
 
 
@@ -162,9 +179,66 @@ const changeStudentRoom = asyncHandler(async (req, res) => {
 
 
 
-const updateCheckInStatus = asyncHandler(async (req, res) => {});
-const deleteStudent = asyncHandler(async (req, res) => {});
+  const updateCheckInStatus = asyncHandler(async (req, res) => {
+    const {studentId, action} = req.body;
+  
+    const student = await Student.findById(studentId)
+  
+    if(!student) {
+      return res.status(404).json({msg: "student not found"})
+    }
+  
+    if(action === "checkIn") {
+      student.checkIn();
+  
+    }else if(action === "checkOut") {
+      student.checkOut()
+    } else {
+      return res.status(400).json({
+        msg: "Invalid action"
+      })
+    }
+  
+    await student.save();
+    res.status(200).json({msg:`Student ${action} succesfully`, student})
+  
+   });
 
+   const deleteStudent = asyncHandler(async (req, res) => {
+    const studentId  = req.params.studentId;
+  
+    try{
+     const student = Student.findById(studentId);
+      if (!student) {
+      res.status(404);
+      throw new Error("Student not found in database");
+     }
+  
+     const room = await Room.findById(student.room)
+  
+     if (room) {
+      room.roomOccupancy = room.roomOccupancy.filter(
+        (occupant) => occupant.toString() !== studentId
+      )
+  
+      if (room.roomOccupancy.length < room.roomCapacity) {
+        room.roomStatus = "available"
+      }
+  
+      await room.save()
+    }
+    await student.deleteOne();
+    res.status(200).json({
+      message: "Student deleted successfully!",
+    });
+  } catch (error) {
+    console.error(error.message)
+    res.status(500).json({
+      message: "Internal server error"
+    })
+  }
+  });
+   
 module.exports = {
   registerStudent,
   getAllStudent,
