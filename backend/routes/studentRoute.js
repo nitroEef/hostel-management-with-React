@@ -15,7 +15,6 @@ router.delete("/delete-student/:_id",protect, deleteStudent);
 module.exports = router;
 
 
-sdjkdjk
 
 
 
