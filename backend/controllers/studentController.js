@@ -126,7 +126,42 @@ const updateStudentProfile = asyncHandler(async (req, res) => {
   }
 });
 
-const changeStudentRoom = asyncHandler(async (req, res) => {});
+const changeStudentRoom = asyncHandler(async (req, res) => {
+  const {studentId, newRoomNum} = req.body;
+  const student = await Student.findById(studentId);
+
+  if (!student) {
+    return res.status(404).json({message:"Student not found"});
+  }
+  const currentRoom = await Room.findById(student.room);
+
+  if (currentRoom) {
+    currentRoom.roomOccupancy = currentRoom.roomOccupancy.filter(
+      (occupant) => occupant.toString()!== studentId)
+
+
+      if (currentRoom.roomOccupancy.length < currentRoom.roomCapacity) {
+        currentRoom.roomStatus = "available";
+      }
+
+      await currentRoom.save();
+    }
+
+    const newRoom = await Room.findOne({ roomNumber: newRoomNum });
+    if (!newRoom) {
+      return res.status(404).json({ message: "newroom not found" });
+    }
+
+    if(newRoom) {
+  })
+
+
+
+
+
+
+
+
 const updateCheckInStatus = asyncHandler(async (req, res) => {});
 const deleteStudent = asyncHandler(async (req, res) => {});
 
