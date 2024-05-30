@@ -1,6 +1,7 @@
 const express = require('express');
 const { registerStudent, getAllStudent, getStudent, updateStudentProfile, changeStudentRoom, updateCheckInStatus, deleteStudent } = require('../controllers/studentController');
 const router = express.Router();
+const {protect} = require('../middleware/auth
 
 router.post("/register-student", registerStudent);
 router.get("/", getAllStudent);
