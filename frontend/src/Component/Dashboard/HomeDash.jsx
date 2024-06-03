@@ -2,11 +2,12 @@ import React from "react";
 import "./HomeDash.css";
 import { blacky, lady, lady2, tallest } from "../../assets";
 import { Link } from "react-router-dom";
-import useAuthRedirect from "../../../context/useAuth"
+// import useAuthRedirect from "../../../context/useAuth"
 
 
 const HomeDash = () => {
-  useAuthRedirect()
+  // useAuthRedirect();
+  // const { user} = useContext(UserContext);
   const activities = [
     {
       userPic: lady,
