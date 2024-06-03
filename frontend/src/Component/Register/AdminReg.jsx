@@ -53,41 +53,44 @@ const AdminReg = () => {
     setPassLength(password.length > 5);
   }, [formData.password]);
 
-  const handleSubmit = useCallback((event) => {
-    event.preventDefault();
+  const handleSubmit = useCallback(
+    (event) => {
+      event.preventDefault();
 
-    const { fullname, email, password, password2 } = formData;
+      const { fullname, email, password, password2 } = formData;
 
-    if (!fullname || !email || !password || !password2) {
-      setFormValidMessage("Oops!! All fields are required😵");
-      return;
-    }
+      if (!fullname || !email || !password || !password2) {
+        setFormValidMessage("Oops!! All fields are required😵");
+        return;
+      }
 
-    if (password !== password) {
-      setFormValidMessage("Password does not match!");
-      return;
-    }
+      if (password !== password) {
+        setFormValidMessage("Password does not match!");
+        return;
+      }
 
-    setIsSubmitting(true);
+      setIsSubmitting(true);
 
-    axios
-      .post("http://localhost:3500/admin/register", formData)
-      .then((response) => {
-        setUser(response.data);
-        setIsSubmitting(false);
-        setFormCompleted(true);
-        toast.success("Registration Successful");
-        navigate("/homedash", { state: { user: response.data } });
-      })
-      .catch((error) => {
-        setIsSubmitting(false);
-        const message =
-          error.response?.status === 400
-            ? "A user with the same email already exists"
-            : "Server error, unable to register";
-        setFormValidMessage(message);
-      });
-  });
+      axios
+        .post("http://localhost:3500/admin/register", formData)
+        .then((response) => {
+          setUser(response.data);
+          setIsSubmitting(false);
+          setFormCompleted(true);
+          toast.success("Registration Successful");
+          navigate("/homedash", { state: { user: response.data } });
+        })
+        .catch((error) => {
+          setIsSubmitting(false);
+          const message =
+            error.response?.status === 400
+              ? "A user with the same email already exists"
+              : "Server error, unable to register";
+          setFormValidMessage(message);
+        });
+    },
+    [formData, navigate, setUser]
+  );
 
   useEffect(() => {
     setTimeout(() => {
@@ -114,7 +117,7 @@ const AdminReg = () => {
                   placeholder="Enter your full name"
                   required
                   value={formData.fullname}
-                  onClick={handleInputChange}
+                  onChange={handleInputChange}
                 />
               </div>
 
@@ -125,9 +128,9 @@ const AdminReg = () => {
                   className="input"
                   name="email"
                   placeholder="Enter your email"
-                  required
                   value={formData.email}
                   onChange={handleInputChange}
+                  required
                 />
               </div>
 
@@ -154,44 +157,46 @@ const AdminReg = () => {
                     return false;
                   }}
                 />
-              </div>
-                  
-              <div className="card">
-              <ul className="form-list">
-                <li>
-                  <span className="indicator">
-                    {switchIcon(uCase)} &nbsp; Lowercase & Uppercase
-                    </span>
-                </li>
-
-                <li>
-                  <span className="indicator">
-                    {switchIcon(passLength)} &nbsp; Number(0-9)
-                    </span>
-                </li>
-
-                <li>
-                  <span className="indicator">
-                    {switchIcon(sChar)} &nbsp; special character(!@#$%&*)
-                    </span>
-                </li>
-
+                </div>
                 
-                <li>
-                  <span className="indicator">
-                    {switchIcon(passLength)} &nbsp; at least 6 characters
-                    </span>
-                </li>
-              </ul>
-              </div>
+                <div className="card">
+                  <ul className="form-list">
+                    <li>
+                      <span className="indicator">
+                        {switchIcon(uCase)} &nbsp; Lowercase & Uppercase
+                      </span>
+                    </li>
+                    
+                    <li>
+                      <span className="indicator">
+                        {switchIcon(num)} &nbsp; Number (0-9)
+                      </span>
+                    </li>
+                    
+                    <li>
+                      <span className="indicator">
+                        {switchIcon(sChar)} &nbsp; Special characters (!@#$%^&*~)
+                      </span>
+                    </li>
+                    
+                    <li>
+                      <span className="indicator">
+                        {switchIcon(passLength)} &nbsp; At least 6 Characters.
+                      </span>
+                    </li>
+                  </ul>
+                </div>
 
 
 
-              <button className="--btn">Create account</button>
-            </form>
+              <button className="--btn" disabled={isSubmitting}>
+                {isSubmitting ? "Signing you up..." : "Create Account"}             
+              </button>
+              </form>
+              {formValidMessage && <p>{formValidMessage}</p>}
+
             <p>
-              Already have an account? <Link to="/login">Login</Link> ||{" "}
-              <Link to="/homedash">Go Home</Link>
+              Already have an account? <Link to="/login">Login</Link>
             </p>
           </div>
         </div>

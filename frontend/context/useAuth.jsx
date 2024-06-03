@@ -12,3 +12,5 @@ const useAuthRedirect = () => {
         }
     }, [user, navigate])
 }
+
+export default useAuthRedirect;
