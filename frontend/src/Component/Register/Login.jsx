@@ -11,6 +11,23 @@ const Login = () => {
     email:"",
     password:""
   })
+
+  const [formValidMessage, setFormValidMessage] = useState("")
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate()
+  const { setUser } = useContext(UserContext);
+
+  const handleInputChange = useCallback((e) =>{
+    setFormValidMessage("")
+    const {name, value} = e.target
+    setFormData((prevFormData)=> ({
+      ...prevFormData,
+      [name]:value
+    }))
+  }, [])
+
+
+
   return (
     <div className="container form__ --100vh">
       <div className="form-container">
@@ -26,6 +43,8 @@ const Login = () => {
             name="email"
             placeholder="example@yahoo.com"
             required
+            value={formData.email}
+            onChange={handleInputChange}
             />
           </div>
 
