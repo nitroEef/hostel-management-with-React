@@ -7,7 +7,7 @@ import './Register.css'
 const initialState = {
   name:"",
   age:"",
-  roomNumber:"",
+  roomNum:"",
   email:"",
   gender:"",
   g_name:"",
@@ -22,6 +22,18 @@ const StudentReg = () => {
   const [formValidMessage, setValidMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const {name, age,roomNum, gender, email, g_name, g_email, nationality} = formData;
+  const navigate = useNavigate();
+
+  const handleInputChange = (e) => {
+    const {name, value} = e.target;
+    setFormData({...formData, [name]: value});
+     
+  }
+const registerStudent = async (e) => {
+  e.preventDefault();
+
+  if(!name || !age ||!roomNum || !email || !gender || !g_email || !g_name || !nationality)
 
 
   return (
