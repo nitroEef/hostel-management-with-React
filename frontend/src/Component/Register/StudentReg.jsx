@@ -34,6 +34,10 @@ const registerStudent = async (e) => {
   e.preventDefault();
 
   if(!name || !age ||!roomNum || !email || !gender || !g_email || !g_name || !nationality)
+    toast.error("all field required");
+  return
+}
+
 
 
   return (
@@ -50,6 +54,8 @@ const registerStudent = async (e) => {
             name="name"
             placeholder="Enter student's name"
             required
+            onChange={handleInputChange}
+            value={formData.name}
           />
         </div>
 
@@ -62,17 +68,20 @@ const registerStudent = async (e) => {
             placeholder="18"
             required
             min={0}
+            onChange={handleInputChange}
+            value={formData.age}
           />
         </div>
 
         <div className="--dir-column">
-          <label htmlFor="number">Room Number:</label>
+          <label htmlFor="roomNum">Room Number:</label>
           <input
             type="text"
             className="input"
-            name="number"
+            name="roomNum"
             placeholder="306"
             required
+            onChange={formData.roomNum}
           />
         </div>
 
@@ -84,29 +93,57 @@ const registerStudent = async (e) => {
             name="email"
             placeholder="example@yahoo.com"
             required
+            onChange={handleInputChange}
+            value={formData.email}
           />
         </div>
 
         <div className="--dir-column">
-          <label htmlFor="name">Guardian&apos;s Name:</label>
+          <label htmlFor="g_name">Guardian&apos;s Name:</label>
           <input
             type="text"
             className="input"
-            name="name"
+            name="g_name"
             placeholder="Enter guardian's name"
             required
+            onChange={handleInputChange}
+            value={formData.g_name}
           />
         </div>
 
         <div className="--dir-column">
-          <label htmlFor="email">Guardian&apos;s Email:</label>
+          <label htmlFor="g_email">Guardian&apos;s Email:</label>
           <input
             type="email"
             className="input"
-            name="email"
+            name="g_email"
             placeholder="example@yahoo.com"
             required
-          />
+            onChange={handleInputChange}
+            value={formData.g_email}/>
+        </div>
+
+        
+        <div className="--dir-column">
+          <label htmlFor="gender">Gender:</label>
+          <input
+            type="text"
+            className="input"
+            name="gender"
+            required
+            onChange={handleInputChange}
+            value={formData.gender}/>
+        </div>
+
+        <div className="--dir-column">
+          <label htmlFor="nationality">Nationality:</label>
+          <input
+            type="text"
+            className="input"
+            name="natioality"
+            required
+            onChange={handleInputChange}
+            value={formData.nationality}/>
         </div>
 
         <button className="--btn">Add Student</button>
