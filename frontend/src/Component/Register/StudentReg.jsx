@@ -1,7 +1,29 @@
-import React from 'react'
+import React, { useState }from 'react';
+import {Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import {toast} from 'react-tostify';
 import './Register.css'
 
+const initialState = {
+  name:"",
+  age:"",
+  roomNumber:"",
+  email:"",
+  gender:"",
+  g_name:"",
+  g_email:"",
+  nationality:""
+
+}
+
+
 const StudentReg = () => {
+  const [formData, setFormData] = useState(initialState);
+  const [formValidMessage, setValidMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+
+
   return (
     <div className="container form__ ">
     <div className="form-container">

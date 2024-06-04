@@ -111,7 +111,10 @@ label {
   transform: translateY(-2px);
 }
 
-
+.error-message{
+  color:brown;
+  font-size: 12px;
+}
 
 @media (min-width: 992px) and (max-width: 1199px) {
 
