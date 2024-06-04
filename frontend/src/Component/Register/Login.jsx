@@ -26,7 +26,26 @@ const Login = () => {
     }))
   }, [])
 
+const longUser = useCallback((e) =>{
+  e.preventDefault()
 
+  const {email, password} = formData;
+
+  if(!email || !password){
+    setFormValidMessage("All fields are required")
+    return
+  }
+  setIsSubmitting(true)
+
+  axios.post("http://localhost:3500/api/admin/login", formData)
+ .then((response) => {
+  console.log(response.data);
+  setUser(response.data);
+  setIsSubmitting(false);
+  toast.success("Login Successful");
+  navigate("/homedash", {state:{user:response.data}})
+ })
+})
 
   return (
     <div className="container form__ --100vh">
