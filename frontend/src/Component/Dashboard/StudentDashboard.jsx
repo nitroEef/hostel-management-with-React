@@ -46,7 +46,7 @@ const studentsData = [
 const StudentDashboard = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [students, setStudents] = useState(studentsData);
-  const [filteredData, setFilteredData] = useState(studentsData);
+  // const [filteredData, setFilteredData] = useState(studentsData);
   const [issideBarToggle, setIsSideBarToggle] = useState(false);
   const [data, setData] = useState([]);
   const [message, setMessage] = useState("");
@@ -82,14 +82,40 @@ const handleModalSelect = (modalType) => {
 }
 
 const removeUser = async (_id) => {
-  try{
-    console.log(`deleting student by id: ${_id}`)
-    const response = await axios.delete(`http://localhost:3500/delete-student/${_id}`)
+  try {
+    console.log(`Delete student by id: ${_id}`)
+    const response = await axios.delete(`http://localhost:3500/student/delete-student/${id}`)
+    console.log(response.data)
     
-  } catch(error) {
+    setData((prevData) => prevData.filter((student) => student._id !== _id)) 
+    setMessage("Student deleted successfully")
+  } catch (error) {
+    setMessage("Failed to delete student");
+    console.error("Error deleting", error)
+
+
+
   }
+
 }
-  const handleSearchChange = (e) => {
+
+const confirmDelete = (_id) => {
+  confirmAlert({
+    title:"delete this student",
+    message: "Are you sure you want to delete this student?",
+    buttons: [{
+      label:"delete",
+      onClick: () => removeUser("_id"),
+    },
+    {
+      label:"cancel",
+      onClick: () => alert("deletion cancelled")
+    }
+  ]
+})}
+
+
+    const handleSearchChange = (e) => {
     // Get the search term from the input field and convert it to lowercase
     const term = e.target.value.toLowerCase();
     setSearchTerm(term);
