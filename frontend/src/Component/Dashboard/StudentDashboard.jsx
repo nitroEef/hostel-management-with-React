@@ -1,10 +1,17 @@
 import React from "react";
 import Sidebar from "./Sidebar";
 import "./StudentDashboard.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { Link } from "react-router-dom";
+import {confirmAlert} from "react-confirm-alert"
 import { FaBars, FaTimes } from "react-icons/fa";
+import { FaPenFancy } from "react-icons/fa";
+import useAuthRedirect from "../../../context/useAuth"
+import axios from "axios"
+import  updateCheckIn from "../Model/updateCheckIn";
+import ChangeStudentRoom from "../../../Modal/ChangeStudentRoom";
+import UpdateStudentProfile from "../../../Modal/UpdateStudentProfile";
 
 const studentsData = [
   {
@@ -41,6 +48,29 @@ const StudentDashboard = () => {
   const [students, setStudents] = useState(studentsData);
   const [filteredData, setFilteredData] = useState(studentsData);
   const [issideBarToggle, setIsSideBarToggle] = useState(false);
+  const [data, setData] = useState([]);
+  const [message, setMessage] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedModal, setSelectedModal] = useState("")
+  const [selectedStudent, setSelectedStudent] = useState(null)
+
+
+  useEffect(() => {
+    const fetchStudents = async () => {
+      try{
+        const response = await axios.get("http://localhost:3500/student")
+        setData(response.data);
+      }catch(error){
+        console.error("error fetching data :, error")
+}}
+fetchStudents();
+}, [])
+
+const handleModalOpen = (student) => {
+    setSelectedStudent(student)
+    setIsModalOpen(true)
+}
+
 
   const handleSearchChange = (e) => {
     // Get the search term from the input field and convert it to lowercase
