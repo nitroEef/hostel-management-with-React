@@ -1,51 +1,67 @@
-import React, { useState }from 'react';
-import {Link, useNavigate } from 'react-router-dom';
+import React, {useState} from 'react'
+import './Register.css';
+import { Link, useNavigate } from 'react-router-dom';
+import {toast} from "react-toastify";
 import axios from 'axios';
-import {toast} from 'react-tostify';
-import './Register.css'
 
 const initialState = {
-  name:"",
-  age:"",
-  roomNum:"",
-  email:"",
-  gender:"",
-  g_name:"",
-  g_email:"",
-  nationality:""
+  name: "",
+  age: "",
+  email: "",
+  gender: "",
+  roomNum: "",
+  g_name: "",
+  g_email: "",
+  nationality: ""
 
-}
-
+};
 
 const StudentReg = () => {
   const [formData, setFormData] = useState(initialState);
-  const [formValidMessage, setValidMessage] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formValidMessage, setFormValidMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const {name, age,roomNum, gender, email, g_name, g_email, nationality} = formData;
-  const navigate = useNavigate();
+  const {name, age, roomNum, email, gender, g_name, g_email, nationality} = formData
 
+  const navigate = useNavigate()
+
+  // handleInputChange is responsible for targeting and change of all our input and change them to new input
   const handleInputChange = (e) => {
     const {name, value} = e.target;
-    setFormData({...formData, [name]: value});
-     
+    setFormData({...formData, [name] : value})
+  };
+
+  const registerStudent = async (e) => {
+    e.preventDefault();
+
+    if(!name || !age || !roomNum || !email || !gender || !g_name || !g_email || !nationality) {
+      toast.error("All field required")
+    }
+
+    axios
+        .post("http://localhost:3500/student/register-student", formData)
+        .then((response) => {
+          console.log(response)
+          setIsSubmitting(false);
+          toast.success("Student Registration successful");
+          navigate("/studentdash");
+        }).catch((error) => {
+          setIsSubmitting(false);
+          const message =
+            error.response?.status === 400
+              ? "A student with the same email already exist"
+              : "Server error, unable to register";
+          setFormValidMessage(message);
+          toast.error(message)
+        });
   }
-const registerStudent = async (e) => {
-  e.preventDefault();
-
-  if(!name || !age ||!roomNum || !email || !gender || !g_email || !g_name || !nationality)
-    toast.error("all field required");
-  return
-}
-
-
 
   return (
     <div className="container form__ ">
     <div className="form-container">
       <p className="title"> Student Registration.</p>
 
-      <form className="form">
+      <form className="form" onSubmit={registerStudent}>
         <div className="--dir-column">
           <label htmlFor="name">Student&apos;s Name:</label>
           <input
@@ -81,7 +97,8 @@ const registerStudent = async (e) => {
             name="roomNum"
             placeholder="306"
             required
-            onChange={formData.roomNum}
+            onChange={handleInputChange}
+            value={formData.roomNum}
           />
         </div>
 
@@ -120,19 +137,21 @@ const registerStudent = async (e) => {
             placeholder="example@yahoo.com"
             required
             onChange={handleInputChange}
-            value={formData.g_email}/>
+            value={formData.g_email}
+          />
         </div>
 
-        
         <div className="--dir-column">
           <label htmlFor="gender">Gender:</label>
           <input
             type="text"
             className="input"
             name="gender"
+            placeholder="Input your Gender"
             required
             onChange={handleInputChange}
-            value={formData.gender}/>
+            value={formData.gender}
+          />
         </div>
 
         <div className="--dir-column">
@@ -140,14 +159,22 @@ const registerStudent = async (e) => {
           <input
             type="text"
             className="input"
-            name="natioality"
+            name="nationality"
+            placeholder="Input your Nationality"
             required
             onChange={handleInputChange}
-            value={formData.nationality}/>
+            value={formData.nationality}
+          />
         </div>
 
-        <button className="--btn">Add Student</button>
+        <button className="--btn" disabled={isSubmitting}>
+        {isSubmitting ? "Adding Student...." : "Add Student"}
+        </button>
       </form>
+
+      {formValidMessage && (
+        <p className='error-message'>{formValidMessage}</p>
+      )}
     </div>
   </div>
   )
