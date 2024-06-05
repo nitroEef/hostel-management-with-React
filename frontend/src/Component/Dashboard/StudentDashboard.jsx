@@ -69,9 +69,26 @@ fetchStudents();
 const handleModalOpen = (student) => {
     setSelectedStudent(student)
     setIsModalOpen(true)
+  }
+
+const handleModalClose = () => {
+  setSelectedModal("")
+  setIsModalOpen(false)
+  setSelectedStudent(null)}
+
+
+const handleModalSelect = (modalType) => {
+  setSelectedModal(modalType)
 }
 
-
+const removeUser = async (_id) => {
+  try{
+    console.log(`deleting student by id: ${_id}`)
+    const response = await axios.delete(`http://localhost:3500/delete-student/${_id}`)
+    
+  } catch(error) {
+  }
+}
   const handleSearchChange = (e) => {
     // Get the search term from the input field and convert it to lowercase
     const term = e.target.value.toLowerCase();
