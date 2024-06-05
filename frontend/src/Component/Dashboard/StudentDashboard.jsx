@@ -9,7 +9,7 @@ import { FaBars, FaTimes } from "react-icons/fa";
 import { FaPenFancy } from "react-icons/fa";
 import useAuthRedirect from "../../../context/useAuth"
 import axios from "axios"
-import  updateCheckIn from "../Model/updateCheckIn";
+import  UpdateCheckIn from "../Model/UpdateCheckIn";
 import ChangeStudentRoom from "../../../Modal/ChangeStudentRoom";
 import UpdateStudentProfile from "../../../Modal/UpdateStudentProfile";
 
@@ -44,7 +44,7 @@ const studentsData = [
 ];
 
 const StudentDashboard = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [search, setSearch] = useState("");
   const [students, setStudents] = useState(studentsData);
   // const [filteredData, setFilteredData] = useState(studentsData);
   const [issideBarToggle, setIsSideBarToggle] = useState(false);
@@ -114,37 +114,43 @@ const confirmDelete = (_id) => {
   ]
 })}
 
+const filteredData = data.filter((item) =>
+  item.nationality.toLowerCase().includes(search.toLowerCase()) ||
+  item.email.toLowerCase().includes(search.toLowerCase()) 
+)
 
-    const handleSearchChange = (e) => {
-    // Get the search term from the input field and convert it to lowercase
-    const term = e.target.value.toLowerCase();
-    setSearchTerm(term);
-    // Filter the studentsData based on the search term
-    const filtered = studentsData.filter(
-      (student) =>
-        // Check if the student's name or email contains the search term
-        student.name.toLowerCase().includes(term) ||
-        student.email.toLowerCase().includes(term)
-    );
-    // Set the filtered data to the state
-    setFilteredData(filtered);
-  };
 
-  const handleDelete = (studentId) => {
-    // Filter out the student with the specified studentId from the students array
-    const updatedStudents = students.filter(
-      (student) => student.id !== studentId
-    );
-    // Update the students array
-    setStudents(updatedStudents);
 
-    // Filter out the student with the specified studentId from the filteredData array
-    const updatedFilteredData = filteredData.filter(
-      (student) => student.id !== studentId
-    );
-    // Update the filteredData array
-    setFilteredData(updatedFilteredData);
-  };
+  //   const handleSearchChange = (e) => {
+  //   // Get the search term from the input field and convert it to lowercase
+  //   const term = e.target.value.toLowerCase();
+  //   setSearchTerm(term);
+  //   // Filter the studentsData based on the search term
+  //   const filtered = studentsData.filter(
+  //     (student) =>
+  //       // Check if the student's name or email contains the search term
+  //       student.name.toLowerCase().includes(term) ||
+  //       student.email.toLowerCase().includes(term)
+  //   );
+  //   // Set the filtered data to the state
+  //   setFilteredData(filtered);
+  // };
+
+  // const handleDelete = (studentId) => {
+  //   // Filter out the student with the specified studentId from the students array
+  //   const updatedStudents = students.filter(
+  //     (student) => student.id !== studentId
+  //   );
+  //   // Update the students array
+  //   setStudents(updatedStudents);
+
+  //   // Filter out the student with the specified studentId from the filteredData array
+  //   const updatedFilteredData = filteredData.filter(
+  //     (student) => student.id !== studentId
+  //   );
+  //   // Update the filteredData array
+  //   setFilteredData(updatedFilteredData);
+  // };
 
   return (
     <div>
@@ -208,8 +214,10 @@ const confirmDelete = (_id) => {
                       <RiDeleteBin6Line
                         size={25}
                         color="red"
-                        onClick={() => handleDelete(student.id)}
+                        onClick={() => confirmDelete(student._id)}
                       />
+                      &nbsp;&nbsp;
+                     <FaPenFancy size={25} color="black" onClick={() => handleModalOpen(student)} />
                     </td>
                   </tr>
                 ))}
@@ -223,6 +231,56 @@ const confirmDelete = (_id) => {
       </main>
     </div>
     </div>
+
+    {isModalOpen && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>Select an option</h2>
+            <button onClick={() =>  handleModalSelect("updateStudentProfile")} className="one">
+          Update student profile
+            </button>
+            <button onClick={() => {
+              handleModalSelect("changeStudentRoom")
+              className="two"
+            }}>
+              Change student room
+            </button>
+            <button onClick={() => {handleModalSelect("UpdatedCheckInStatus") 
+              className="three"
+            }
+            }>
+              updated check-in
+            </button>
+            <button onClick={handleModalSelect}
+            >
+             Close
+            </button>
+          </div>
+          
+        </div>
+      )}
+
+{
+  selectedModal === "updateStudentProfile" && (
+    <UpdateStudentProfile student={selectedStudent} onClose={handleModalClose} />
+  )
+}
+
+{
+  selectedModal === "changeStudentRoom" && (
+    <ChangeStudentRoom student={selectedStudent} onClose={handleModalClose} />
+  )
+}
+
+{
+  selectedModal === "updateCheckIn" && (
+    <UpdateCheckIn student={selectedStudent} onClose={handleModalClose} />
+  )
+}
+
+
+      
+    
     </div>
     
 
