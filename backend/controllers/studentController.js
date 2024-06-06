@@ -16,6 +16,30 @@ const ensureUniqueId = async () => {
   return uniqueId;
 };
 
+const date = new Date();
+const formatDate = (input) => {
+  return input > 9 ? input : `0${input}`
+} 
+
+const formatHour = (input) => {
+  return input > 12 ? input -12 : input
+}
+
+const format = {
+  dd:formatDate(date.getDate()),
+  mm:formatDate(date.getMonth() + 1),
+  yyyy:formatDate(date.getFullYear()),
+
+  HH:formatDate(date.getHours()),
+  hh:formatDate(formatHour(date.getHours())),
+
+  MM:formatDate(date.getMinutes()),
+  SS:formatDate(date.getSeconds())
+}
+
+const format24hour = ({dd,mm,yyyy, HH, MM, SS}) => {
+  return `${mm}/${dd}/${yyyy} ${HH}:${MM}:${SS}`
+}
 const registerStudent = asyncHandler(async (req, res) => {
   try {
     const { email, name, age, nationality, g_name, g_email, gender, roomNum } =
@@ -53,6 +77,9 @@ const registerStudent = asyncHandler(async (req, res) => {
 
     const uniqueId = await ensureUniqueId();
 
+
+
+
     const student = await Student.create({
       _id: uniqueId,
       email,
@@ -65,6 +92,8 @@ const registerStudent = asyncHandler(async (req, res) => {
       },
       gender,
       room: room._id, // Assign the room's ObjectId to the student
+      checkedIn:true,
+      checkedInTime : format24hour(format),
     });
 
     room.roomOccupancy.push(student._id);
@@ -174,11 +203,6 @@ const changeStudentRoom = asyncHandler(async (req, res) => {
 
 
 
-
-
-
-
-
   const updateCheckInStatus = asyncHandler(async (req, res) => {
     const {studentId, action} = req.body;
   
@@ -189,15 +213,22 @@ const changeStudentRoom = asyncHandler(async (req, res) => {
     }
   
     if(action === "checkIn") {
-      student.checkIn();
+      student.checkedIn = true;
+      student.checkedInTime= format24hour(format)
   
     }else if(action === "checkOut") {
-      student.checkOut()
+      student.checkedIn = false;
+      student.checkedOutTime= format24hour(format)
     } else {
       return res.status(400).json({
         msg: "Invalid action"
       })
     }
+
+    await Room.updateMany(
+      {roomOccupancy :studentId},
+      {$pull : {roomOccupancy : studentId}}
+    )
   
     await student.save();
     res.status(200).json({msg:`Student ${action} succesfully`, student})
