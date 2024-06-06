@@ -21,12 +21,19 @@ const [error,setError] = useState('');
     }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
    setIsSubmitting(false);
    setError("");
 
-   const response = await axios.post("http://localhost:3500/room/createNewRoom, roomData")
+   try{
+   const response = await axios.post("http://localhost:3500/room/createNewRoom", roomData)
    onAddRoom(response.data);
+   onClose();
+  }catch(error){
+    setError("failed to create new room", error);
+  } finally {
+    setIsSubmitting(false);
+  }
   };
 
   return (
@@ -44,53 +51,34 @@ const [error,setError] = useState('');
           onChange={handleChange}
           className="input-field"
         />
-        <label htmlFor="capacity" className="room-label">
+        <label htmlFor="roomCapacity" className="room-label">
           Capacity:
         </label>
         <input
           type="text"
           id="capacity"
-          name="capacity"
-          value={newRoom.capacity}
+          name="roomCapacity"
+          value={newRoom.roomCapacity}
           onChange={handleChange}
           className="input-field"
         />
-        <label htmlFor="occupancy" className="room-label">
-          Occupancy:
-        </label>
-        <input
-          type="text"
-          id="occupancy"
-          name="occupancy"
-          value={newRoom.occupancy}
-          onChange={handleChange}
-          className="input-field"
-        />
-        <label htmlFor="status" className="room-label">
-          Status:
-        </label>
-        <input
-          type="text"
-          id="status"
-          name="status"
-          value={newRoom.status}
-          onChange={handleChange}
-          className="input-field"
-        />
-        <label htmlFor="location" className="room-label">
+        
+        <label htmlFor="roomLocation" className="room-label">
           Location:
         </label>
         <input
           type="text"
           id="location"
-          name="location"
-          value={newRoom.location}
+          name="roomLocation"
+          value={newRoom.roomLocation}
           onChange={handleChange}
           className="input-field"
         />
+
+        {error && <p>{error}</p>}
         <div className="button-group">
-          <button className="save-button" onClick={handleSubmit}>
-            Save
+          <button className="btn-primary" onClick={handleSubmit} disabled={isSubmitting}>
+            {isSubmitting ? "adding....":"add"}
           </button>
           <button className="cancel-button" onClick={onClose}>
             Cancel
