@@ -20,31 +20,31 @@ const Room = () => {
     const [message, setMessage] = useState("");
     const [isSideBarToggle, setIsSideBarToggle] = useState(false)
 
-useEffect(() => {
-    setIsLoading(true);
-    const fetchRooms = async () => {
-        try {
-            const resoponse = await axios.get("htttp://localhost:3500/room/get-all-room")
-            setRoomData(resoponse.data);
-        } catch (error) {
+    useEffect(() => {
+        setIsLoading(true);
+        const fetchRooms = async () => {
+          try {
+            const response = await axios.get(
+              "http://localhost:3500/room/get-all-room"
+            );
+            setRoomData(response.data);
+          } catch (error) {
             setIsLoading(false);
-            if (error.response && error.response.status === 400){
-
-                setMessage("cannot fetch room...")
-        }else{
-            setMessage("server error")
-        }
-    }
-        finally{
-            setIsLoading = (false)
-        }
-
-    }fetchRooms()
-}, [])
+            if (error.response && error.response.status === 400) {
+              setMessage("Cannot fetch room...");
+            } else {
+              setMessage("Server error!");
+            }
+          } finally {
+            setIsLoading(false);
+          }
+        };
+        fetchRooms;
+      }, []);
 
 useEffect(() => {
     const filteredRooms = roomData.filter((res) => {
-        const roomLocation = res.roomLocation?.toLowercase() || "",
+        const roomLocation = res.roomLocation?.toLowercase() || "";
         const roomStatus = res.roomStatus?.toLowercase() || "";
 
         return (
@@ -76,17 +76,25 @@ useEffect(() => {
     };
 
     const handleAddRoom = (newRoomData) => {
-        setRooms([...rooms, newRoomData]);
-        setFilteredData([...rooms, newRoomData]);
+        setRoomData((prevData) => [...prevData, newRoomData]);
     };
 
-    const handleUpdateRoom = (roomNumber, newStatus) => {
-        const updatedRooms = rooms.map((room) =>
-            room.roomNumber === roomNumber ? { ...room, status: newStatus } : room
-        );
-        setRooms(updatedRooms);
-        setFilteredData(updatedRooms);
+    const handleUpdateRoom = (updatedRoomData) => {
+        setRoomData((prevData) => 
+            prevData.map((room) => 
+                room._id === updatedRoomData._id ? updatedRoomData : room
+    ))
     };
+
+    const removeRoom = async (id) => {
+        try {
+          await axios.delete("http://localhost:3500/room/delete-room/${id}")
+          setRoomData((prevRoomData) => prevRoomData.filter((room) => room._id!== id));
+        } catch (error) {
+            console.error("failed to delete room", error);
+            
+        }
+    }
 
     const handleDeleteRoom = (roomNumber) => {
         const updatedRooms = rooms.filter(
@@ -149,4 +157,4 @@ useEffect(() => {
     );
 };
 
-export default Room;
+export default Room;
