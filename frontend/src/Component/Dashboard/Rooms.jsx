@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Sidebar from "./Sidebar"
 import RoomTable from "./RoomTable";
 import { FaBars, FaTimes } from "react-icons/fa";
@@ -39,7 +39,24 @@ useEffect(() => {
             setIsLoading = (false)
         }
 
-    }})
+    }fetchRooms()
+}, [])
+
+useEffect(() => {
+    const filteredRooms = roomData.filter((res) => {
+        const roomLocation = res.roomLocation?.toLowercase() || "",
+        const roomStatus = res.roomStatus?.toLowercase() || "";
+
+        return (
+            roomLocation.includes(search.toLowerCase()) ||
+            roomStatus.includes(search.toLowerCase())
+        );
+
+        
+    })
+    setSearchResult(filteredRooms);
+})
+
 
 
     const [searchTerm, setSearchTerm] = useState("");
