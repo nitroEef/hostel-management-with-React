@@ -1,16 +1,39 @@
 import { useState } from "react";
 import "./StudentDashboard.css";
+import axios from "axios"
 
 const EditStatusModal = ({ room, onUpdateRoom, onClose }) => {
-  const [newStatus, setNewStatus] = useState(room.status);
+  const [newStatus, setNewStatus] = useState(room.roomStatus);
+  const [isSubmitting, setIsSubmitting] = useState("");
+  const [error , setError] = useState("")
+
+
 
   const handleStatusChange = (e) => {
     setNewStatus(e.target.value);
   };
 
-  const handleSubmit = () => {
-    onUpdateRoom(room.roomNumber, newStatus);
+  const handleSubmit = async () => {
+   setIsSubmitting(true);
+   setError("");
+
+   try {
+
+    const response = await axios.patch(`http://localhost:3500/room/update-room/${room._id}`, {
+      roomStatus : newStatus
+    })
+
+    console.log("room updated");
+    onUpdateRoom(response.data);
     onClose();
+    
+   } catch (error) {
+    setError("FAILED TO UPDATE ROOM STATUS, PLS TRY AGAIN")
+    console.log(error);
+   }finally{
+    setIsSubmitting(false);
+   
+   }
   };
 
   return (

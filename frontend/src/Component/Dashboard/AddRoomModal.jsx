@@ -26,11 +26,12 @@ const [error,setError] = useState('');
    setError("");
 
    try{
-   const response = await axios.post("http://localhost:3500/room/createNewRoom", roomData)
+   const response = await axios.post("http://localhost:3500/room/createNewRoom", newRoom)
    onAddRoom(response.data);
    onClose();
   }catch(error){
     setError("failed to create new room", error);
+    console.log(error)
   } finally {
     setIsSubmitting(false);
   }
