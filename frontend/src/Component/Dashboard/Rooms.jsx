@@ -5,10 +5,9 @@ import { FaBars, FaTimes } from "react-icons/fa";
 import '../Dashboard/StudentDashboard.css';
 import useAuthRedirect from "../../../context/useAuth";
 import axios from "axios";
+import { confirmAlert } from "react-confirm-alert";
+import 'react-confirm-alert/src/react-confirm-alert.css'; 
 
-const initialRooms = [];
-
-  
 
 
 const Room = () => {
@@ -59,21 +58,6 @@ useEffect(() => {
 
 
 
-    const [searchTerm, setSearchTerm] = useState("");
-    const [rooms, setRooms] = useState(initialRooms);
-    const [filteredData, setFilteredData] = useState(initialRooms);
-
-    const handleSearchChange = (e) => {
-        const term = e.target.value.toLowerCase();
-        setSearchTerm(term);
-        const filtered = rooms.filter(
-            (room) =>
-                room.roomNumber.toLowerCase().includes(term) ||
-                room.status.toLowerCase().includes(term) ||
-                room.location.toLowerCase().includes(term)
-        );
-        setFilteredData(filtered);
-    };
 
     const handleAddRoom = (newRoomData) => {
         setRoomData((prevData) => [...prevData, newRoomData]);
@@ -88,7 +72,7 @@ useEffect(() => {
 
     const removeRoom = async (id) => {
         try {
-          await axios.delete("http://localhost:3500/room/delete-room/${id}")
+          await axios.delete(`http://localhost:3500/room/delete-room/${id}`)
           setRoomData((prevRoomData) => prevRoomData.filter((room) => room._id!== id));
         } catch (error) {
             console.error("failed to delete room", error);
@@ -96,13 +80,23 @@ useEffect(() => {
         }
     }
 
-    const handleDeleteRoom = (roomNumber) => {
-        const updatedRooms = rooms.filter(
-            (room) => room.roomNumber !== roomNumber
-        );
-        setRooms(updatedRooms);
-        setFilteredData(updatedRooms);
-    };
+    const confirmDelete = (id) => {
+        confirmAlert({
+          title: " Delete This Room",
+          message: "Are you sure you want to delete this room?",
+          buttons: [
+            {
+              label: "Delete",
+              onClick: () => removeRoom(id),
+            },
+            {
+              label: "cancel",
+              onClick: () => alert("deletion cancelled"),
+            },
+          ],
+        });
+      };
+    
 
     return (
         <div>
@@ -133,15 +127,15 @@ useEffect(() => {
                                 placeholder="Search by room number, status, or location"
                                 type="text"
                                 className="search"
-                                value={searchTerm}
-                                onChange={handleSearchChange}
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
                             />
                             <div>
                                 <RoomTable
-                                    rooms={filteredData}
+                                    rooms={searchResult}
                                     onAddRoom={handleAddRoom}
                                     onUpdateRoom={handleUpdateRoom}
-                                    onDeleteRoom={handleDeleteRoom}
+                                    onDeleteRoom={confirmDelete}
                                 />
                             </div>
 

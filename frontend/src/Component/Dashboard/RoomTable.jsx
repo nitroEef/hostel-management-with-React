@@ -6,8 +6,31 @@ import EditStatusModal from "./EditStatusModal";
 import AddRoomModal from "./AddRoomModal";
 
 const RoomTable = ({ rooms, onAddRoom, onUpdateRoom, onDeleteRoom }) => {
-  const [showModal, setShowModal] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   const [selectedRoom, setSelectedRoom] = useState(null);
+
+
+  const handleEditClick = (room) => {
+    selectedRoom(room);
+    setIsAddModalOpen(true)
+  }
+
+  const handleEditModalClose = () => {
+    setIsEditModalOpen(false);
+    selectedRoom(null);
+  }
+
+  consthandleAddRoomOpen = () => {
+    setIsAddModalOpen(true)
+  }
+  const handleAddRoomClose = () => {
+    setIsAddModalOpen(false)
+  }
+
+
+
+  const [showModal, setShowModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
 
   const openModal = (room) => {
