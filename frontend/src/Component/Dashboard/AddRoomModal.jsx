@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import "./StudentDashboard.css";
+import axios from "axios";
 
 const AddRoomModal = ({ onAddRoom, onClose }) => {
   const [newRoom, setNewRoom] = useState({
+    roomLocation: "",
     roomNumber: "",
-    capacity: "",
-    occupancy: "",
-    status: "",
-    location: "",
+    roomCapacity: "",
   });
+
+const [isSubmitting, setIsSubmitting] = useState(false);
+const [error,setError] = useState('');
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,8 +22,11 @@ const AddRoomModal = ({ onAddRoom, onClose }) => {
   };
 
   const handleSubmit = () => {
-    onAddRoom(newRoom);
-    onClose();
+   setIsSubmitting(false);
+   setError("");
+
+   const response = await axios.post("http://localhost:3500/room/createNewRoom, roomData")
+   onAddRoom(response.data);
   };
 
   return (

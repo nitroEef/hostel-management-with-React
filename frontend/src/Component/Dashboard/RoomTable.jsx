@@ -18,10 +18,10 @@ const RoomTable = ({ rooms, onAddRoom, onUpdateRoom, onDeleteRoom }) => {
 
   const handleEditModalClose = () => {
     setIsEditModalOpen(false);
-    selectedRoom(null);
+    setSelectedRoom(null);
   }
 
-  consthandleAddRoomOpen = () => {
+  const handleAddRoomOpen = () => {
     setIsAddModalOpen(true)
   }
   const handleAddRoomClose = () => {
@@ -29,22 +29,6 @@ const RoomTable = ({ rooms, onAddRoom, onUpdateRoom, onDeleteRoom }) => {
   }
 
 
-
-  const [showModal, setShowModal] = useState(false);
-  const [showAddModal, setShowAddModal] = useState(false);
-
-  const openModal = (room) => {
-    setSelectedRoom(room);
-    setShowModal(true);
-  };
-
-  const closeModal = () => {
-    setShowModal(false);
-  };
-
-  const closeAddModal = () => {
-    setShowAddModal(false)
-  }
 
   return (
     <>
@@ -70,11 +54,11 @@ const RoomTable = ({ rooms, onAddRoom, onUpdateRoom, onDeleteRoom }) => {
                 <td className="same_class">{room.location}</td>
                 <td className="same_class">{room.status}</td>
                 <td className="same_class ">
-                  <button onClick={() => openModal(room)} className="_noBg">
+                  <button onClick={() => handleEditClick(room)} className="_noBg">
                     <FaPen size={25} color="blue" />
                   </button>
                   <button
-                    onClick={() => onDeleteRoom(room.roomNumber)}
+                    onClick={() => onDeleteRoom(room._id)}
                     className="_noBg"
                   >
                     <RiDeleteBin6Line size={25} color="red" />
@@ -86,19 +70,19 @@ const RoomTable = ({ rooms, onAddRoom, onUpdateRoom, onDeleteRoom }) => {
         </table>
       </div>
       <div className="right">
-        <button onClick={() =>  setShowAddModal(true)} className="btn-secondary">
+        <button onClick={handleAddRoomOpen} className="btn-secondary">
           Add New Room
         </button>
 
-        {showAddModal &&(
-          <AddRoomModal onAddRoom={onAddRoom} onClose={closeAddModal}/>
+        {isAddModalOpenl &&(
+          <AddRoomModal onAddRoom={onAddRoom} onClose={handleAddRoomClose}/>
         )}
 
-        {showModal && (
+        {isEditModalOpen && (
           <EditStatusModal
             room={selectedRoom}
             onUpdateRoom={onUpdateRoom}
-            onClose={closeModal}
+            onClose={handleEditModalClose}
           />
         )}
       </div>
