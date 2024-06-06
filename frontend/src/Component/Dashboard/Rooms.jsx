@@ -2,39 +2,49 @@ import { useState } from "react";
 import Sidebar from "./Sidebar"
 import RoomTable from "./RoomTable";
 import { FaBars, FaTimes } from "react-icons/fa";
-import '../Dashboard/StudentDashboard.css'
+import '../Dashboard/StudentDashboard.css';
+import useAuthRedirect from "../../../context/useAuth";
+import axios from "axios";
 
+const initialRooms = [];
 
-const initialRooms = [
-    {
-        roomNumber: "101",
-        capacity: 3,
-        occupancy: 2,
-        status: "Available",
-        location: "Lakeside Manor, Riverside",
-    },
-    {
-        roomNumber: "102",
-        capacity: 3,
-        occupancy: 3,
-        status: "Occupied",
-        location: "Hillview Hostel, Springfield",
-    },
-    {
-        roomNumber: "103",
-        capacity: 4,
-        occupancy: 3,
-        status: "Available",
-        location: "Maplewood Lodge, Greenfield",
-    }
-];
+  
 
 
 const Room = () => {
+    useAuthRedirect()
+    const [roomData, setRoomData] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [search, setSearch] = useState("");
+    const [searchResult, setSearchResult] = useState([]);
+    const [message, setMessage] = useState("");
+    const [isSideBarToggle, setIsSideBarToggle] = useState(false)
+
+useEffect(() => {
+    setIsLoading(true);
+    const fetchRooms = async () => {
+        try {
+            const resoponse = await axios.get("htttp://localhost:3500/room/get-all-room")
+            setRoomData(resoponse.data);
+        } catch (error) {
+            setIsLoading(false);
+            if (error.response && error.response.status === 400){
+
+                setMessage("cannot fetch room...")
+        }else{
+            setMessage("server error")
+        }
+    }
+        finally{
+            setIsLoading = (false)
+        }
+
+    }})
+
+
     const [searchTerm, setSearchTerm] = useState("");
     const [rooms, setRooms] = useState(initialRooms);
     const [filteredData, setFilteredData] = useState(initialRooms);
-    const [isSideBarToggle, setIsSideBarToggle] = useState(false)
 
     const handleSearchChange = (e) => {
         const term = e.target.value.toLowerCase();

@@ -22,11 +22,7 @@ function App() {
 
           <Route
             path="/student-reg"
-            element={
-              <Layout>
-                <StudentReg />
-              </Layout>
-            }
+            element={<StudentReg /> }
           />
 
           <Route
