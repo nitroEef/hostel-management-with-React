@@ -26,26 +26,22 @@ const studentSchema = new mongoose.Schema(
     name: {
       type: String,
       required: true,
-      unique: true,
     },
 
     age: {
       type: Number,
       required: true,
-      unique: true,
     },
 
     gender: {
       type: String,
       required: true,
-      unique: true,
       enum: ["male", "female", "others"],
     },
 
     nationality: {
       type: String,
       required: true,
-      unique: true,
     },
 
     email: {
@@ -53,7 +49,6 @@ const studentSchema = new mongoose.Schema(
       required: [true, "plase add email e"],
       trim: true,
       lowercase: true,
-      unique: true,
     },
 
     guardian: guardianSchema,

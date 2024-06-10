@@ -78,7 +78,7 @@ const registerStudent = asyncHandler(async (req, res) => {
     const uniqueId = await ensureUniqueId();
 
 
-
+ 
 
     const student = await Student.create({
       _id: uniqueId,
@@ -204,7 +204,7 @@ const changeStudentRoom = asyncHandler(async (req, res) => {
 
 
   const updateCheckInStatus = asyncHandler(async (req, res) => {
-    const {studentId, action} = req.body;
+    const {studentId, action, roomNumber} = req.body;
   
     const student = await Student.findById(studentId)
   
@@ -225,13 +225,31 @@ const changeStudentRoom = asyncHandler(async (req, res) => {
       })
     }
 
-    await Room.updateMany(
-      {roomOccupancy :studentId},
-      {$pull : {roomOccupancy : studentId}}
-    )
-  
+    const room = await Room.findOne({roomNumber});
+    if (!room) {
+      return res.status(404).json({
+        msg: "Room not found"
+      })
+    }
+
+    if (action === 'checkIn'){
+      room.roomOccupancy.push(studentId);
+    } else if (action === 'checkOut'){
+        room.roomOccupancy.pull (studentId);
+      }
+    await room.save();
     await student.save();
-    res.status(200).json({msg:`Student ${action} succesfully`, student})
+
+    res.status(200)
+    .json ({msg:`Student ${action} successfully added`, student , room})
+
+    // await Room.updateMany(
+    //   {roomOccupancy :studentId},
+    //   {$pull : {roomOccupancy : studentId}}
+    // )
+  
+    // await student.save();
+    // res.status(200).json({msg:`Student ${action} succesfully`, student})
   
    });
 

@@ -46,7 +46,7 @@ const StudentDashboard = () => {
     setIsModalOpen(false);
     setSelectedStudent(null);
   };
-  const handleModalSelected = (modalType) => {
+  const handleModalSelect = (modalType) => {
     setSelectedModal(modalType);
   };
   const removeUser = async (_id) => {
@@ -81,11 +81,11 @@ const StudentDashboard = () => {
     });
   };
 
-  const filteredData = data.filter(
-    (item) =>
-      item.nationality.toLowerCase().includes(search.toLowerCase()) ||
-      item.email.toLowerCase().includes(search.toLowerCase())
-  );
+  // const filteredData = data.filter(
+  //   (item) =>
+  //     item.nationality.toLowerCase().includes(search.toLowerCase()) ||
+  //     item.email.toLowerCase().includes(search.toLowerCase())
+  // );
 
   return (
     <div>
@@ -143,11 +143,11 @@ const StudentDashboard = () => {
                   </thead>
 
                   <tbody className="table__body">
-                    {filteredData.map((student, index) => (
+                    {data.map((student, index) => (
                       <tr key={index} className="table__row">
                         <td className="same_class">{student.name}</td>
                         <td className="same_class">{student.email}</td>
-                        <td className="same_class">{student.idNumber}</td>
+                        <td className="same_class">{student._id}</td>
                         <td className="same_class">{student.gender}</td>
                         <td className="same_class">{student.age}</td>
                         <td className="same_class">{student.nationality}</td>
@@ -181,14 +181,14 @@ const StudentDashboard = () => {
           <div className="modal-content">
             <h2>Select an option</h2>
             <button
-              onClick={() => handleModalSelected("updateStudentProfile")}
+              onClick={() => handleModalSelect("updateStudentProfile")}
               className="one"
             >
               Update student profile
             </button>
             <button
               onClick={() => {
-                handleModalSelected("changeStudentRoom");
+                handleModalSelect("changeStudentRoom");
                 className = "two";
               }}
             >
@@ -196,13 +196,13 @@ const StudentDashboard = () => {
             </button>
             <button
               onClick={() => {
-                handleModalSelected("UpdatedCheckInStatus");
-                className = "three";
-              }}
+                handleModalSelect("UpdatedCheckInStatus");
+                }}
+              className = "three"
             >
               updated check-in
             </button>
-            <button onClick={handleModalSelected}>Close</button>
+            <button onClick={handleModalSelect}>Close</button>
           </div>
         </div>
       )}
@@ -218,7 +218,7 @@ const StudentDashboard = () => {
           onClose={handleModalClose}
         />
       )}
-      {selectedModal === "UpdateCheckIn" && (
+      {selectedModal === "UpdatedCheckInStatus" && (
         <UpdateCheckIn
           student={selectedStudent}
           onClose={handleModalClose}

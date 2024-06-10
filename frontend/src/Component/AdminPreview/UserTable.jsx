@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import EditRoleModal from "./EditRoleModal";
+import useAuthRedirect from "../../../context/useAuth";
 
 const UserTable = ({ data, onDelete, onUpdateRole }) => {
+
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
@@ -49,7 +51,7 @@ const UserTable = ({ data, onDelete, onUpdateRole }) => {
                 </button>
                 <button
                   className="__prevDelButton"
-                  onClick={() => onDelete(user.id)}
+                  onClick={() => onDelete(user._id)}
                 >
                   <RiDeleteBin6Line />
                 </button>
