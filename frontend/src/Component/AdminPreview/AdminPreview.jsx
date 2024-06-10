@@ -8,7 +8,7 @@ import useAuthRedirect from "../../../context/useAuth";
 import axios from "axios";
 
 const userData = [];
-,dlllfmlfmlf
+
 
 const AdminPreview = () => {
   useAuthRedirect();
