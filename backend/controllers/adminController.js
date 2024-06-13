@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const Admin = require("../models/AdminModel");
 const  generateToken  = require("../utils/index");
 
+
 //register a new admin
 const register = asyncHandler(async (req, res) => {
   try {
@@ -189,28 +190,57 @@ const getAdmins = asyncHandler(async (req, res) => {
 
 // to update admins 
 const updateAdmin = asyncHandler(async (req, res) => {
-  // Extracting adminId from the request parameters
-  const { adminId } = req.params;
+  const  adminId  = req.params.adminId;
+  const {role} = req.body;
 
-  // Finding the admin by ID and excluding the password field from the result
-  const admin = await Admin.findById(adminId).select("-password");
+    try{
+      const admin = await Admin.findById(adminId);
+      if (!admin) {
+        return res.status(404).json({message:"admin not found"});
+    }
 
-  if (admin) {
-    // If the admin exists, update the fields if they are provided in the request body
-    if (req.body?.fullname) admin.fullname = req.body.fullname;
-    if (req.body?.email) admin.email = req.body.email;
-    if (req.body?.role) admin.role = req.body.role;
+    admin.role = role
 
-    // Save the updated admin document to the database
-    const result = await admin.save();
+    await admin.save();
 
-    // Respond with the updated admin document
-    res.json(result);
-  } else {
-    // If the admin does not exist, respond with an appropriate message (could be a 404 error)
-    res.status(404).json({ message: 'Admin not found' });
+    res.status(200).json(admin)
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({msg:"Server Error"});
   }
-});
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+//   // Finding the admin by ID and excluding the password field from the result
+//   const admin = await Admin.findById(adminId).select("-password");
+
+//   if (admin) {
+//     // If the admin exists, update the fields if they are provided in the request body
+//     if (req.body?.fullname) admin.fullname = req.body.fullname;
+//     if (req.body?.email) admin.email = req.body.email;
+//     if (req.body?.role) admin.role = req.body.role;
+
+//     // Save the updated admin document to the database
+//     const result = await admin.save();
+
+//     // Respond with the updated admin document
+//     res.json(result);
+//   } else {
+//     // If the admin does not exist, respond with an appropriate message (could be a 404 error)
+//     res.status(404).json({ message: 'Admin not found' });
+//   }
+// });
 
 
 

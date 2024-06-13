@@ -2,13 +2,10 @@ import React, { useEffect, useState } from "react";
 import "./AdminPreview.css";
 import { CiSearch } from "react-icons/ci";
 import UserTable from "./UserTable";
-import { confirmAlert } from "react-confirm-alert"; // Import
-import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 import useAuthRedirect from "../../../context/useAuth";
 import axios from "axios";
-
-const userData = [];
-
 
 const AdminPreview = () => {
   useAuthRedirect();
@@ -18,16 +15,15 @@ const AdminPreview = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setIsLoading(true);
     const fetchAdmin = async () => {
+      setIsLoading(true);
       try {
         const response = await axios.get("http://localhost:3500/admin");
         setAdminData(response.data);
+        setIsLoading(false);
       } catch (error) {
         setIsLoading(false);
         setMessage("Cannot fetch data");
-      } finally {
-        setIsLoading(false);
       }
     };
     fetchAdmin();
@@ -41,7 +37,7 @@ const AdminPreview = () => {
       setMessage("Admin deleted successfully");
     } catch (error) {
       setMessage("Failed to delete admin");
-      console.error("Error deleting admin");
+      console.error("Error deleting admin", error);
     }
   };
 
@@ -51,11 +47,11 @@ const AdminPreview = () => {
         role: newRole,
       });
       setAdminData((prevData) =>
-        prevData.map((admin) =>
+        adminData.map((admin) =>
           admin._id === id ? { ...admin, role: response.data.role } : admin
         )
       );
-      setMessage("Admin updated Successfully");
+      setMessage("Admin updated successfully");
     } catch (error) {
       setMessage("Failed to update admin");
       console.error("Failed to update admin", error);
@@ -65,7 +61,8 @@ const AdminPreview = () => {
   const filteredData = adminData.filter(
     (admin) =>
       admin.fullname.toLowerCase().includes(search.toLowerCase()) ||
-      admin.email.toLowerCase().includes(search.toLowerCase())
+      admin.email.toLowerCase().includes(search.toLowerCase()) ||
+      admin.role.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -83,19 +80,25 @@ const AdminPreview = () => {
         />
       </div>
 
-      <div className="__prevList">
-        <UserTable
-          data={filteredData}
-          onDelete={handleDelete}
-          onUpdateRole={handleUpdateRole}
-        />
-      </div>
+     <div className="__prevList">
+      {isLoading ? (
+        <p>Loading...</p>
+        ): adminData.length > 0 ? (
+          <UserTable
+            data={filteredData}
+            onDelete={handleDelete}
+            onUpdateRole={handleUpdateRole}
+          />
+        ) : (<p>no update admin</p>)
+      }
 
-      <div className="__inviteBtnCon">
-        <button className="__inviteBtn">Invite Admin</button>
+     </div>
+
+      {message && <p>{message}</p>}
+
       </div>
-    </div>
-  );
-};
+  )
+}
+
 
 export default AdminPreview;

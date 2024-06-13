@@ -33,10 +33,11 @@ const UserTable = ({ data, onDelete, onUpdateRole }) => {
             <th className="__tableHead">Actions</th>
           </tr>
         </thead>
+
         <tbody id="__tableBody">
           {data.map((user, index) => (
             <tr key={index}>
-              <td className="__tableData __tableName">{user.name}</td>
+              <td className="__tableData __tableName">{user.fullname}</td>
               <td className="__tableData __tableEmail">{user.email}</td>
               <td className="__tableData __tableRole">
                 <p>{user.role}</p>
