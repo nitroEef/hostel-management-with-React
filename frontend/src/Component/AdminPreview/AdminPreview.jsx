@@ -18,7 +18,7 @@ const AdminPreview = () => {
     const fetchAdmin = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get("http://localhost:3500/admin");
+        const response = await axios.get("https://hostel-management-with-react.vercel.app//admin");
         setAdminData(response.data);
         setIsLoading(false);
       } catch (error) {
@@ -32,7 +32,7 @@ const AdminPreview = () => {
   const handleDelete = async (id) => {
     console.log("Deleting user with id:", id);
     try {
-      await axios.delete(`http://localhost:3500/admin/${id}`);
+      await axios.delete(`https://hostel-management-with-react.vercel.app/admin/${id}`);
       setAdminData((prevData) => prevData.filter((admin) => admin._id !== id));
       setMessage("Admin deleted successfully");
     } catch (error) {
@@ -43,7 +43,7 @@ const AdminPreview = () => {
 
   const handleUpdateRole = async (id, newRole) => {
     try {
-      const response = await axios.patch(`http://localhost:3500/admin/${id}`, {
+      const response = await axios.patch(`https://hostel-management-with-react.vercel.app/admin/${id}`, {
         role: newRole,
       });
       setAdminData((prevData) =>

@@ -22,7 +22,7 @@ const Room = () => {
     const fetchRooms = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3500/room/get-all-room"
+          "https://hostel-management-with-react.vercel.app/room/get-all-room"
         );
         setRoomData(response.data);
       } catch (error) {
@@ -66,7 +66,7 @@ const Room = () => {
 
   const removeRoom = async (id) => {
     try {
-      await axios.delete(`http://localhost:3500/room/delete-room/${id}`);
+      await axios.delete(`https://hostel-management-with-react.vercel.app/room/delete-room/${id}`);
       setRoomData((prevRoomData) =>
         prevRoomData.filter((room) => room._id !== id)
       );

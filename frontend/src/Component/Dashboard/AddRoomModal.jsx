@@ -26,7 +26,7 @@ const [error,setError] = useState('');
    setError("");
 
    try{
-   const response = await axios.post("http://localhost:3500/room/createNewRoom", newRoom)
+   const response = await axios.post("https://hostel-management-with-react.vercel.app/room/createNewRoom", newRoom)
    onAddRoom(response.data);
    onClose();
   }catch(error){
